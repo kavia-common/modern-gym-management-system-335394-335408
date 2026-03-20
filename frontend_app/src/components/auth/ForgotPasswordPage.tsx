@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useAuth } from "@/context/AuthContext";
-import { Dumbbell, ArrowLeft, CheckCircle } from "lucide-react";
+import { Dumbbell, ArrowLeft, CheckCircle, Send } from "lucide-react";
 
 interface ForgotPasswordPageProps {
   onSwitchToLogin: () => void;
@@ -45,25 +45,29 @@ export default function ForgotPasswordPage({ onSwitchToLogin }: ForgotPasswordPa
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-background)] p-4">
-      <div className="w-full max-w-md">
+      <div className="fixed inset-0 opacity-[0.015]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, var(--color-text) 1px, transparent 0)', backgroundSize: '40px 40px' }} aria-hidden="true" />
+
+      <div className="w-full max-w-[420px] relative animate-fade-in-up">
         <div className="text-center mb-8">
-          <div className="inline-flex p-3 rounded-xl bg-[#16A34A] text-white mb-4">
-            <Dumbbell size={32} />
+          <div className="inline-flex p-3.5 rounded-2xl gradient-accent text-white mb-5 shadow-lg shadow-emerald-500/20">
+            <Dumbbell size={28} />
           </div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Reset Password</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
+          <h1 className="text-2xl font-bold text-[var(--color-text)] tracking-tight">Reset Password</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1.5">
             {sent ? "Check your email" : "Enter your email to receive a reset link"}
           </p>
         </div>
 
-        <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] p-6 shadow-sm">
+        <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border)] p-7 shadow-lg">
           {sent ? (
-            <div className="text-center py-4">
-              <CheckCircle size={48} className="text-[#16A34A] mx-auto mb-4" />
+            <div className="text-center py-6">
+              <div className="inline-flex p-4 rounded-2xl bg-[var(--color-accent)]/10 mb-5">
+                <CheckCircle size={40} className="text-[var(--color-accent)]" />
+              </div>
               <p className="text-sm text-[var(--color-text)]">
                 We&apos;ve sent a password reset link to <strong>{email}</strong>.
               </p>
-              <p className="text-xs text-[var(--color-text-secondary)] mt-2">
+              <p className="text-xs text-[var(--color-text-muted)] mt-2">
                 Check your inbox and follow the instructions.
               </p>
               <Button variant="outline" className="w-full mt-6" onClick={onSwitchToLogin}>
@@ -71,7 +75,7 @@ export default function ForgotPasswordPage({ onSwitchToLogin }: ForgotPasswordPa
               </Button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <Input
                 label="Email"
                 type="email"
@@ -82,6 +86,7 @@ export default function ForgotPasswordPage({ onSwitchToLogin }: ForgotPasswordPa
               />
               <Button type="submit" loading={loading} className="w-full">
                 Send Reset Link
+                <Send size={15} />
               </Button>
             </form>
           )}
@@ -89,7 +94,7 @@ export default function ForgotPasswordPage({ onSwitchToLogin }: ForgotPasswordPa
 
         <button
           onClick={onSwitchToLogin}
-          className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] mx-auto mt-4 transition-colors"
+          className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] mx-auto mt-6 transition-colors font-medium"
         >
           <ArrowLeft size={14} />
           Back to Sign In

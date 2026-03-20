@@ -26,14 +26,14 @@ export default function PaymentsPage() {
       key: "memberName",
       label: "Member",
       sortable: true,
-      render: (p: Payment) => <span className="font-medium">{p.memberName}</span>,
+      render: (p: Payment) => <span className="font-semibold">{p.memberName}</span>,
     },
     { key: "plan", label: "Plan" },
     {
       key: "amount",
       label: "Amount",
       sortable: true,
-      render: (p: Payment) => <span className="font-semibold">${p.amount.toFixed(2)}</span>,
+      render: (p: Payment) => <span className="font-bold">${p.amount.toFixed(2)}</span>,
     },
     { key: "method", label: "Method" },
     { key: "date", label: "Date", sortable: true },
@@ -56,16 +56,16 @@ export default function PaymentsPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Payments</h1>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">Track and manage all payment invoices</p>
+        <h1 className="text-[var(--color-text)] tracking-tight">Payments</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-1">Track and manage all payment invoices</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatsCard title="Total Collected" value={`$${totalPaid.toFixed(2)}`} icon={<CheckCircle size={20} className="text-[#16A34A]" />} />
-        <StatsCard title="Pending" value={`$${totalPending.toFixed(2)}`} icon={<Clock size={20} className="text-[#F59E0B]" />} />
-        <StatsCard title="Overdue" value={`$${totalOverdue.toFixed(2)}`} icon={<AlertTriangle size={20} className="text-[#EF4444]" />} />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+        <StatsCard title="Total Collected" value={`$${totalPaid.toFixed(2)}`} icon={<CheckCircle size={20} />} />
+        <StatsCard title="Pending" value={`$${totalPending.toFixed(2)}`} icon={<Clock size={20} />} />
+        <StatsCard title="Overdue" value={`$${totalOverdue.toFixed(2)}`} icon={<AlertTriangle size={20} />} />
       </div>
 
       <DataTable

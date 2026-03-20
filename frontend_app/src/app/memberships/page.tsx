@@ -24,46 +24,48 @@ export default function MembershipsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Membership Plans</h1>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">Choose the plan that fits your needs</p>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="text-center max-w-2xl mx-auto">
+        <h1 className="text-[var(--color-text)] tracking-tight">Membership Plans</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-2">Choose the plan that fits your fitness goals and budget</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {MOCK_PLANS.map((plan) => (
           <div
             key={plan.id}
-            className={`relative rounded-xl border bg-[var(--color-surface)] p-6 flex flex-col transition-shadow hover:shadow-md
-              ${plan.popular ? "border-[#16A34A] ring-1 ring-[#16A34A]" : "border-[var(--color-border)]"}`}
+            className={`relative rounded-2xl border bg-[var(--color-surface)] p-6 flex flex-col transition-all duration-300 hover:shadow-lg
+              ${plan.popular ? "border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/20 shadow-[var(--shadow-glow)]" : "border-[var(--color-border)] hover:border-[var(--color-accent)]/30"}`}
           >
             {plan.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge variant="success" className="flex items-center gap-1">
+                <Badge variant="success" className="flex items-center gap-1 shadow-sm">
                   <Star size={10} />
                   Popular
                 </Badge>
               </div>
             )}
             <h3 className="text-lg font-bold text-[var(--color-text)] mt-1">{plan.name}</h3>
-            <div className="flex items-baseline gap-1 mt-2">
-              <span className="text-3xl font-bold text-[var(--color-text)]">${plan.price}</span>
-              <span className="text-sm text-[var(--color-text-secondary)]">/ {plan.duration.toLowerCase()}</span>
+            <div className="flex items-baseline gap-1 mt-3">
+              <span className="text-3xl font-bold text-[var(--color-text)] tracking-tight">${plan.price}</span>
+              <span className="text-sm text-[var(--color-text-muted)]">/ {plan.duration.toLowerCase()}</span>
             </div>
-            <div className="flex items-center gap-1.5 mt-2 text-xs text-[var(--color-text-secondary)]">
+            <div className="flex items-center gap-1.5 mt-2 text-xs text-[var(--color-text-muted)]">
               <Users size={12} />
               {plan.activeMembers} active members
             </div>
-            <ul className="mt-4 flex-1 space-y-2">
+            <ul className="mt-5 flex-1 space-y-2.5">
               {plan.features.map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-sm text-[var(--color-text)]">
-                  <Check size={14} className="text-[#16A34A] flex-shrink-0" />
+                <li key={idx} className="flex items-center gap-2.5 text-sm text-[var(--color-text)]">
+                  <div className="w-4 h-4 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center flex-shrink-0">
+                    <Check size={10} className="text-[var(--color-accent)]" />
+                  </div>
                   {feature}
                 </li>
               ))}
             </ul>
             <Button
-              className="w-full mt-4"
+              className="w-full mt-5"
               variant={plan.popular ? "primary" : "outline"}
               onClick={() => handleSubscribe(plan.name)}
             >

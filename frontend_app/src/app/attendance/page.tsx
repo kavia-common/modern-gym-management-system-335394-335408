@@ -66,9 +66,11 @@ export default function AttendancePage() {
       label: "Member",
       sortable: true,
       render: (r: AttendanceRecord) => (
-        <div className="flex items-center gap-2">
-          <UserCheck size={16} className="text-[#16A34A]" />
-          <span className="font-medium">{r.memberName}</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[var(--color-accent)]/10 flex items-center justify-center flex-shrink-0">
+            <UserCheck size={14} className="text-[var(--color-accent)]" />
+          </div>
+          <span className="font-semibold">{r.memberName}</span>
         </div>
       ),
     },
@@ -95,15 +97,15 @@ export default function AttendancePage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Attendance</h1>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">Track member check-ins and check-outs</p>
+        <h1 className="text-[var(--color-text)] tracking-tight">Attendance</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-1">Track member check-ins and check-outs</p>
       </div>
 
       {/* Quick Check-in */}
-      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-        <h2 className="text-base font-semibold text-[var(--color-text)] mb-3">Quick Check-in</h2>
+      <div className="card-elevated p-5 sm:p-6">
+        <h2 className="text-[var(--color-text)] mb-4">Quick Check-in</h2>
         <div className="flex gap-3 flex-wrap">
           <div className="flex-1 min-w-[200px]">
             <Input
@@ -113,7 +115,7 @@ export default function AttendancePage() {
               onKeyDown={(e) => e.key === "Enter" && handleCheckIn()}
             />
           </div>
-          <Button onClick={handleCheckIn}>
+          <Button onClick={handleCheckIn} className="self-end">
             <LogIn size={16} />
             Check In
           </Button>

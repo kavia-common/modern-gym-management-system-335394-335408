@@ -12,22 +12,22 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: "border-[#16A34A] bg-[#16A34A]/5",
-  error: "border-[#EF4444] bg-[#EF4444]/5",
-  info: "border-[#3B82F6] bg-[#3B82F6]/5",
-  warning: "border-[#F59E0B] bg-[#F59E0B]/5",
+  success: "border-l-emerald-500 bg-emerald-50/80 dark:bg-emerald-500/10",
+  error: "border-l-red-500 bg-red-50/80 dark:bg-red-500/10",
+  info: "border-l-blue-500 bg-blue-50/80 dark:bg-blue-500/10",
+  warning: "border-l-amber-500 bg-amber-50/80 dark:bg-amber-500/10",
 };
 
 const iconColorMap = {
-  success: "text-[#16A34A]",
-  error: "text-[#EF4444]",
-  info: "text-[#3B82F6]",
-  warning: "text-[#F59E0B]",
+  success: "text-emerald-500",
+  error: "text-red-500",
+  info: "text-blue-500",
+  warning: "text-amber-500",
 };
 
 /**
  * ToastContainer - Renders the stack of active toast notifications.
- * Positioned fixed at bottom-right of viewport.
+ * Positioned fixed at bottom-right of viewport with modern styling.
  */
 // PUBLIC_INTERFACE
 export default function ToastContainer() {
@@ -36,35 +36,26 @@ export default function ToastContainer() {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm" role="status" aria-live="polite">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full px-4 sm:px-0" role="status" aria-live="polite">
       {toasts.map((toast) => {
         const Icon = iconMap[toast.type];
         return (
           <div
             key={toast.id}
-            className={`flex items-start gap-3 p-3 rounded-lg border shadow-md bg-[var(--color-surface)] ${colorMap[toast.type]} animate-slide-in`}
+            className={`flex items-start gap-3 p-4 rounded-xl border-l-4 shadow-lg backdrop-blur-sm bg-[var(--color-surface)]/95 ${colorMap[toast.type]} animate-slide-in-toast`}
           >
             <Icon size={18} className={`mt-0.5 flex-shrink-0 ${iconColorMap[toast.type]}`} />
-            <p className="text-sm flex-1 text-[var(--color-text)]">{toast.message}</p>
+            <p className="text-sm flex-1 text-[var(--color-text)] font-medium">{toast.message}</p>
             <button
               onClick={() => removeToast(toast.id)}
-              className="p-0.5 rounded hover:bg-[var(--color-hover)] transition-colors"
+              className="p-1 rounded-lg hover:bg-[var(--color-hover)] transition-colors flex-shrink-0"
               aria-label="Dismiss notification"
             >
-              <X size={14} className="text-[var(--color-text-secondary)]" />
+              <X size={14} className="text-[var(--color-text-muted)]" />
             </button>
           </div>
         );
       })}
-      <style jsx>{`
-        @keyframes slide-in {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.2s ease-out;
-        }
-      `}</style>
     </div>
   );
 }

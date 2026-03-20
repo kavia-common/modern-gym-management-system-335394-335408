@@ -26,7 +26,6 @@ export default function MembersPage() {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  // Add form state
   const [formName, setFormName] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formPhone, setFormPhone] = useState("");
@@ -38,13 +37,13 @@ export default function MembersPage() {
       label: "Name",
       sortable: true,
       render: (m: Member) => (
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A] font-bold text-xs flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center text-[var(--color-accent)] font-bold text-xs flex-shrink-0">
             {m.name.charAt(0)}
           </div>
-          <div>
-            <p className="font-medium text-[var(--color-text)]">{m.name}</p>
-            <p className="text-xs text-[var(--color-text-secondary)]">{m.email}</p>
+          <div className="min-w-0">
+            <p className="font-semibold text-[var(--color-text)] truncate">{m.name}</p>
+            <p className="text-xs text-[var(--color-text-muted)]">{m.email}</p>
           </div>
         </div>
       ),
@@ -95,11 +94,11 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Members</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">{members.length} total members</p>
+          <h1 className="text-[var(--color-text)] tracking-tight">Members</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">{members.length} total members</p>
         </div>
         <Button onClick={() => setShowAddModal(true)}>
           <Plus size={16} />
@@ -116,7 +115,7 @@ export default function MembersPage() {
 
       {/* Add Member Modal */}
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Add New Member">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           <Input label="Full Name" placeholder="Enter full name" value={formName} onChange={(e) => setFormName(e.target.value)} />
           <Input label="Email" type="email" placeholder="email@example.com" value={formEmail} onChange={(e) => setFormEmail(e.target.value)} />
           <Input label="Phone" type="tel" placeholder="(555) 000-0000" value={formPhone} onChange={(e) => setFormPhone(e.target.value)} />
@@ -126,14 +125,14 @@ export default function MembersPage() {
               id="plan-select"
               value={formPlan}
               onChange={(e) => setFormPlan(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg text-sm border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20 focus:border-[var(--color-accent)] transition-all duration-200"
             >
               <option value="Basic">Basic</option>
               <option value="Standard">Standard</option>
               <option value="Premium">Premium</option>
             </select>
           </div>
-          <div className="flex gap-2 justify-end mt-2">
+          <div className="flex gap-3 justify-end mt-2">
             <Button variant="outline" onClick={() => setShowAddModal(false)}>Cancel</Button>
             <Button onClick={handleAdd}>Add Member</Button>
           </div>
@@ -143,9 +142,9 @@ export default function MembersPage() {
       {/* Member Detail Modal */}
       <Modal isOpen={showDetailModal} onClose={() => setShowDetailModal(false)} title="Member Profile" size="lg">
         {selectedMember && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A] font-bold text-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent)]/5 flex items-center justify-center text-[var(--color-accent)] font-bold text-2xl ring-1 ring-[var(--color-accent)]/10">
                 {selectedMember.name.charAt(0)}
               </div>
               <div>
@@ -155,30 +154,30 @@ export default function MembersPage() {
                 </Badge>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Email</p>
-                <p className="text-sm text-[var(--color-text)] flex items-center gap-1.5"><Mail size={14} />{selectedMember.email}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Email</p>
+                <p className="text-sm text-[var(--color-text)] flex items-center gap-1.5 mt-1"><Mail size={14} className="text-[var(--color-text-muted)]" />{selectedMember.email}</p>
               </div>
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Phone</p>
-                <p className="text-sm text-[var(--color-text)] flex items-center gap-1.5"><Phone size={14} />{selectedMember.phone}</p>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Phone</p>
+                <p className="text-sm text-[var(--color-text)] flex items-center gap-1.5 mt-1"><Phone size={14} className="text-[var(--color-text-muted)]" />{selectedMember.phone}</p>
               </div>
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Plan</p>
-                <p className="text-sm font-medium text-[var(--color-text)]">{selectedMember.plan}</p>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Plan</p>
+                <p className="text-sm font-semibold text-[var(--color-text)] mt-1">{selectedMember.plan}</p>
               </div>
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Join Date</p>
-                <p className="text-sm text-[var(--color-text)]">{selectedMember.joinDate}</p>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Join Date</p>
+                <p className="text-sm text-[var(--color-text)] mt-1">{selectedMember.joinDate}</p>
               </div>
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Age</p>
-                <p className="text-sm text-[var(--color-text)]">{selectedMember.age}</p>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Age</p>
+                <p className="text-sm text-[var(--color-text)] mt-1">{selectedMember.age}</p>
               </div>
-              <div>
-                <p className="text-xs text-[var(--color-text-secondary)]">Gender</p>
-                <p className="text-sm text-[var(--color-text)]">{selectedMember.gender}</p>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]">
+                <p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Gender</p>
+                <p className="text-sm text-[var(--color-text)] mt-1">{selectedMember.gender}</p>
               </div>
             </div>
             <div className="flex justify-end pt-2">

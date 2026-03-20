@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useAuth, UserRole } from "@/context/AuthContext";
-import { Dumbbell } from "lucide-react";
+import { Dumbbell, ArrowRight } from "lucide-react";
 
 interface LoginPageProps {
   onSwitchToRegister: () => void;
@@ -53,19 +53,22 @@ export default function LoginPage({ onSwitchToRegister, onSwitchToForgot }: Logi
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-background)] p-4">
-      <div className="w-full max-w-md">
+      {/* Subtle background pattern */}
+      <div className="fixed inset-0 opacity-[0.015]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, var(--color-text) 1px, transparent 0)', backgroundSize: '40px 40px' }} aria-hidden="true" />
+
+      <div className="w-full max-w-[420px] relative animate-fade-in-up">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex p-3 rounded-xl bg-[#16A34A] text-white mb-4">
-            <Dumbbell size={32} />
+          <div className="inline-flex p-3.5 rounded-2xl gradient-accent text-white mb-5 shadow-lg shadow-emerald-500/20">
+            <Dumbbell size={28} />
           </div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Welcome to GymPro</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">Sign in to manage your gym</p>
+          <h1 className="text-2xl font-bold text-[var(--color-text)] tracking-tight">Welcome back</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1.5">Sign in to your GymPro account</p>
         </div>
 
-        {/* Form */}
-        <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] p-6 shadow-sm">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Form Card */}
+        <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border)] p-7 shadow-lg">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <Input
               label="Email"
               type="email"
@@ -84,24 +87,25 @@ export default function LoginPage({ onSwitchToRegister, onSwitchToForgot }: Logi
             />
 
             {error && email && password && (
-              <p className="text-sm text-[#EF4444]" role="alert">{error}</p>
+              <p className="text-sm text-[var(--color-error)] bg-[var(--color-error)]/5 px-3 py-2 rounded-xl" role="alert">{error}</p>
             )}
 
             <Button type="submit" loading={loading} className="w-full">
               Sign In
+              <ArrowRight size={16} />
             </Button>
           </form>
 
           <button
             onClick={onSwitchToForgot}
-            className="w-full text-sm text-[#16A34A] hover:underline mt-3 text-center"
+            className="w-full text-sm text-[var(--color-accent)] hover:text-[var(--color-accent-dark)] font-medium mt-4 text-center transition-colors"
           >
             Forgot password?
           </button>
 
           {/* Demo quick access */}
-          <div className="mt-6 pt-6 border-t border-[var(--color-border)]">
-            <p className="text-xs text-center text-[var(--color-text-secondary)] mb-3">Quick demo access</p>
+          <div className="mt-6 pt-6 border-t border-[var(--color-divider)]">
+            <p className="text-[11px] text-center text-[var(--color-text-muted)] mb-3 uppercase tracking-wider font-medium">Quick demo access</p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="flex-1" onClick={() => handleDemoLogin("admin")}>
                 Admin
@@ -116,9 +120,9 @@ export default function LoginPage({ onSwitchToRegister, onSwitchToForgot }: Logi
           </div>
         </div>
 
-        <p className="text-center text-sm text-[var(--color-text-secondary)] mt-4">
+        <p className="text-center text-sm text-[var(--color-text-muted)] mt-6">
           Don&apos;t have an account?{" "}
-          <button onClick={onSwitchToRegister} className="text-[#16A34A] hover:underline font-medium">
+          <button onClick={onSwitchToRegister} className="text-[var(--color-accent)] hover:text-[var(--color-accent-dark)] font-semibold transition-colors">
             Sign Up
           </button>
         </p>

@@ -34,14 +34,12 @@ export default function Modal({ isOpen, onClose, title, children, size = "md" }:
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
-      // Focus the dialog after render
       setTimeout(() => dialogRef.current?.focus(), 50);
 
       const handleKey = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
           onClose();
         }
-        // Basic focus trap
         if (e.key === "Tab" && dialogRef.current) {
           const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -79,7 +77,7 @@ export default function Modal({ isOpen, onClose, title, children, size = "md" }:
     >
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/50 transition-opacity"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -90,19 +88,19 @@ export default function Modal({ isOpen, onClose, title, children, size = "md" }:
         aria-modal="true"
         aria-labelledby="modal-title"
         tabIndex={-1}
-        className={`relative w-full ${sizeClasses[size]} rounded-xl p-6 shadow-lg transition-transform
-          bg-[var(--color-surface)] text-[var(--color-text)]`}
+        className={`relative w-full ${sizeClasses[size]} rounded-2xl p-6 shadow-xl animate-scale-in
+          bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)]`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-5">
           <h2 id="modal-title" className="text-lg font-semibold">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+            className="p-2 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
             aria-label="Close dialog"
           >
-            <X size={18} />
+            <X size={18} className="text-[var(--color-text-secondary)]" />
           </button>
         </div>
         {children}

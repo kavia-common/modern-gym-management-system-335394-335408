@@ -38,14 +38,14 @@ export default function ClassesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">Class Schedule</h1>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">{MOCK_CLASSES.length} classes available this week</p>
+        <h1 className="text-[var(--color-text)] tracking-tight">Class Schedule</h1>
+        <p className="text-sm text-[var(--color-text-muted)] mt-1">{MOCK_CLASSES.length} classes available this week</p>
       </div>
 
-      {/* Day filter */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      {/* Day filter - scrollable on mobile */}
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
         <Button
           variant={selectedDay === "All" ? "primary" : "outline"}
           size="sm"
@@ -59,6 +59,7 @@ export default function ClassesPage() {
             variant={selectedDay === day ? "primary" : "outline"}
             size="sm"
             onClick={() => setSelectedDay(day)}
+            className="whitespace-nowrap"
           >
             {day.slice(0, 3)}
           </Button>
@@ -66,36 +67,37 @@ export default function ClassesPage() {
       </div>
 
       {/* Class cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {filteredClasses.map((cls) => {
           const isFull = cls.enrolled >= cls.capacity;
+          const fillPercent = (cls.enrolled / cls.capacity) * 100;
           return (
             <button
               key={cls.id}
               onClick={() => setSelectedClass(cls)}
-              className="text-left rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 hover:shadow-md transition-shadow"
+              className="text-left card-elevated p-5 group"
             >
-              <div className="flex items-start justify-between mb-2">
+              <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="font-semibold text-[var(--color-text)]">{cls.name}</h3>
-                  <p className="text-xs text-[var(--color-text-secondary)]">{cls.trainer}</p>
+                  <h3 className="font-semibold text-[var(--color-text)] group-hover:text-[var(--color-accent)] transition-colors">{cls.name}</h3>
+                  <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{cls.trainer}</p>
                 </div>
                 <Badge variant={isFull ? "error" : "success"}>
                   {isFull ? "Full" : "Open"}
                 </Badge>
               </div>
-              <div className="flex flex-col gap-1.5 mt-3 text-xs text-[var(--color-text-secondary)]">
-                <span className="flex items-center gap-1.5"><Clock size={12} />{cls.day} • {cls.time} • {cls.duration}min</span>
-                <span className="flex items-center gap-1.5"><MapPin size={12} />{cls.room}</span>
-                <span className="flex items-center gap-1.5"><Users size={12} />{cls.enrolled}/{cls.capacity} enrolled</span>
+              <div className="flex flex-col gap-2 mt-3 text-xs text-[var(--color-text-muted)]">
+                <span className="flex items-center gap-2"><Clock size={13} />{cls.day} • {cls.time} • {cls.duration}min</span>
+                <span className="flex items-center gap-2"><MapPin size={13} />{cls.room}</span>
+                <span className="flex items-center gap-2"><Users size={13} />{cls.enrolled}/{cls.capacity} enrolled</span>
               </div>
               {/* Capacity bar */}
-              <div className="mt-3 h-1.5 bg-[var(--color-hover)] rounded-full overflow-hidden">
+              <div className="mt-4 h-1.5 bg-[var(--color-hover)] rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all"
+                  className="h-full rounded-full transition-all duration-500"
                   style={{
-                    width: `${(cls.enrolled / cls.capacity) * 100}%`,
-                    backgroundColor: isFull ? "#EF4444" : "#16A34A",
+                    width: `${fillPercent}%`,
+                    backgroundColor: isFull ? "var(--color-error)" : "var(--color-accent)",
                   }}
                 />
               </div>
@@ -107,19 +109,19 @@ export default function ClassesPage() {
       {/* Class Detail Modal */}
       <Modal isOpen={!!selectedClass} onClose={() => setSelectedClass(null)} title="Class Details" size="md">
         {selectedClass && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
               <h3 className="text-lg font-semibold text-[var(--color-text)]">{selectedClass.name}</h3>
               <Badge variant="info">{selectedClass.category}</Badge>
             </div>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><p className="text-xs text-[var(--color-text-secondary)]">Instructor</p><p className="text-[var(--color-text)] font-medium">{selectedClass.trainer}</p></div>
-              <div><p className="text-xs text-[var(--color-text-secondary)]">Schedule</p><p className="text-[var(--color-text)]">{selectedClass.day} at {selectedClass.time}</p></div>
-              <div><p className="text-xs text-[var(--color-text-secondary)]">Duration</p><p className="text-[var(--color-text)]">{selectedClass.duration} minutes</p></div>
-              <div><p className="text-xs text-[var(--color-text-secondary)]">Room</p><p className="text-[var(--color-text)]">{selectedClass.room}</p></div>
-              <div><p className="text-xs text-[var(--color-text-secondary)]">Capacity</p><p className="text-[var(--color-text)]">{selectedClass.enrolled}/{selectedClass.capacity}</p></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]"><p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Instructor</p><p className="text-[var(--color-text)] font-medium mt-1">{selectedClass.trainer}</p></div>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]"><p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Schedule</p><p className="text-[var(--color-text)] mt-1">{selectedClass.day} at {selectedClass.time}</p></div>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]"><p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Duration</p><p className="text-[var(--color-text)] mt-1">{selectedClass.duration} minutes</p></div>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]"><p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Room</p><p className="text-[var(--color-text)] mt-1">{selectedClass.room}</p></div>
+              <div className="p-3 rounded-xl bg-[var(--color-hover)]"><p className="text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-wider">Capacity</p><p className="text-[var(--color-text)] mt-1">{selectedClass.enrolled}/{selectedClass.capacity}</p></div>
             </div>
-            <div className="flex gap-2 justify-end pt-2">
+            <div className="flex gap-3 justify-end pt-2">
               <Button variant="outline" onClick={() => setSelectedClass(null)}>Close</Button>
               <Button onClick={() => handleEnroll(selectedClass)}>
                 {selectedClass.enrolled >= selectedClass.capacity ? "Join Waitlist" : "Enroll"}

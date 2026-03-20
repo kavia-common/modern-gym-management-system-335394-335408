@@ -23,31 +23,36 @@ interface StatsCardProps {
 // PUBLIC_INTERFACE
 export default function StatsCard({ title, value, change, changeLabel, icon }: StatsCardProps) {
   const getTrendColor = () => {
-    if (change === undefined || change === 0) return "text-[var(--color-text-secondary)]";
-    return change > 0 ? "text-[#16A34A]" : "text-[#EF4444]";
+    if (change === undefined || change === 0) return "text-[var(--color-text-muted)]";
+    return change > 0 ? "text-[var(--color-accent)]" : "text-[var(--color-error)]";
+  };
+
+  const getTrendBg = () => {
+    if (change === undefined || change === 0) return "bg-[var(--color-hover)]";
+    return change > 0 ? "bg-[var(--color-accent)]/10" : "bg-[var(--color-error)]/10";
   };
 
   const TrendIcon = () => {
-    if (change === undefined || change === 0) return <Minus size={14} />;
-    return change > 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />;
+    if (change === undefined || change === 0) return <Minus size={12} />;
+    return change > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />;
   };
 
   return (
-    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-shadow hover:shadow-md">
+    <div className="card-elevated p-5 group">
       <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm text-[var(--color-text-secondary)] mb-1">{title}</p>
-          <p className="text-2xl font-bold text-[var(--color-text)]">{value}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-text-muted)] mb-2">{title}</p>
+          <p className="text-2xl font-bold text-[var(--color-text)] tracking-tight">{value}</p>
           {change !== undefined && (
-            <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${getTrendColor()}`}>
+            <div className={`inline-flex items-center gap-1 mt-3 px-2 py-1 rounded-lg text-[11px] font-semibold ${getTrendColor()} ${getTrendBg()}`}>
               <TrendIcon />
               <span>{change > 0 ? "+" : ""}{change}%</span>
-              {changeLabel && <span className="text-[var(--color-text-secondary)] font-normal">• {changeLabel}</span>}
+              {changeLabel && <span className="text-[var(--color-text-muted)] font-normal ml-0.5">{changeLabel}</span>}
             </div>
           )}
         </div>
         {icon && (
-          <div className="p-2.5 rounded-lg bg-[var(--color-hover)]">
+          <div className="p-3 rounded-xl bg-[var(--color-accent)]/8 text-[var(--color-accent)] transition-transform duration-200 group-hover:scale-110">
             {icon}
           </div>
         )}

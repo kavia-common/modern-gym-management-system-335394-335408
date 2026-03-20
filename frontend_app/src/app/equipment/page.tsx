@@ -50,7 +50,7 @@ export default function EquipmentPage() {
   };
 
   const columns = [
-    { key: "name", label: "Equipment", sortable: true, render: (e: Equipment) => <span className="font-medium">{e.name}</span> },
+    { key: "name", label: "Equipment", sortable: true, render: (e: Equipment) => <span className="font-semibold">{e.name}</span> },
     { key: "category", label: "Category", sortable: true },
     {
       key: "status",
@@ -68,11 +68,11 @@ export default function EquipmentPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Equipment</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">{equipment.length} items in inventory</p>
+          <h1 className="text-[var(--color-text)] tracking-tight">Equipment</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">{equipment.length} items in inventory</p>
         </div>
         <Button onClick={() => setShowAddModal(true)}>
           <Plus size={16} />
@@ -87,11 +87,11 @@ export default function EquipmentPage() {
       />
 
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Add New Equipment">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           <Input label="Equipment Name" placeholder="e.g., Treadmill Pro" value={formName} onChange={(e) => setFormName(e.target.value)} />
           <Input label="Category" placeholder="e.g., Cardio, Weights" value={formCategory} onChange={(e) => setFormCategory(e.target.value)} />
           <Input label="Location" placeholder="e.g., Main Floor" value={formLocation} onChange={(e) => setFormLocation(e.target.value)} />
-          <div className="flex gap-2 justify-end mt-2">
+          <div className="flex gap-3 justify-end mt-2">
             <Button variant="outline" onClick={() => setShowAddModal(false)}>Cancel</Button>
             <Button onClick={handleAdd}>Add Equipment</Button>
           </div>

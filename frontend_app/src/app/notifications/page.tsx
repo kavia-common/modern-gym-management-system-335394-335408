@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { MOCK_NOTIFICATIONS, Notification } from "@/data/mockData";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { CheckCircle, AlertTriangle, Info, XCircle, Check, Trash2 } from "lucide-react";
+import { CheckCircle, AlertTriangle, Info, XCircle, Check, Trash2, BellOff } from "lucide-react";
 
 const iconMap = {
   success: CheckCircle,
@@ -14,10 +14,17 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: "text-[#16A34A]",
-  warning: "text-[#F59E0B]",
-  info: "text-[#3B82F6]",
-  error: "text-[#EF4444]",
+  success: "text-emerald-500",
+  warning: "text-amber-500",
+  info: "text-blue-500",
+  error: "text-red-500",
+};
+
+const bgMap = {
+  success: "bg-emerald-500/10",
+  warning: "bg-amber-500/10",
+  info: "bg-blue-500/10",
+  error: "bg-red-500/10",
 };
 
 /**
@@ -49,11 +56,11 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Notifications</h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
+          <h1 className="text-[var(--color-text)] tracking-tight">Notifications</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-1">
             {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}` : "All caught up!"}
           </p>
         </div>
@@ -65,11 +72,11 @@ export default function NotificationsPage() {
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         {notifications.length === 0 ? (
-          <div className="text-center py-16 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]">
-            <Info size={40} className="mx-auto text-[var(--color-text-secondary)] mb-3" />
-            <p className="text-sm text-[var(--color-text-secondary)]">No notifications</p>
+          <div className="text-center py-20 card-elevated">
+            <BellOff size={40} className="mx-auto text-[var(--color-text-muted)] mb-4 opacity-50" />
+            <p className="text-sm text-[var(--color-text-muted)]">No notifications</p>
           </div>
         ) : (
           notifications.map((notification) => {
@@ -77,36 +84,38 @@ export default function NotificationsPage() {
             return (
               <div
                 key={notification.id}
-                className={`flex items-start gap-3 p-4 rounded-xl border bg-[var(--color-surface)] transition-colors
-                  ${notification.read ? "border-[var(--color-border)]" : "border-[#16A34A]/30 bg-[#16A34A]/[0.02]"}`}
+                className={`flex items-start gap-4 p-4 sm:p-5 rounded-2xl border bg-[var(--color-surface)] transition-all duration-200 hover:shadow-sm
+                  ${notification.read ? "border-[var(--color-border)]" : "border-[var(--color-accent)]/20 bg-[var(--color-accent)]/[0.02]"}`}
               >
-                <Icon size={20} className={`mt-0.5 flex-shrink-0 ${colorMap[notification.type]}`} />
+                <div className={`p-2 rounded-xl flex-shrink-0 ${bgMap[notification.type]}`}>
+                  <Icon size={16} className={colorMap[notification.type]} />
+                </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-sm font-semibold text-[var(--color-text)]">{notification.title}</h3>
                     {!notification.read && <Badge variant="success">New</Badge>}
                   </div>
-                  <p className="text-sm text-[var(--color-text-secondary)] mt-0.5">{notification.message}</p>
-                  <p className="text-xs text-[var(--color-text-secondary)] mt-1">{notification.date} at {notification.time}</p>
+                  <p className="text-sm text-[var(--color-text-secondary)] mt-1">{notification.message}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] mt-2">{notification.date} at {notification.time}</p>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
                   {!notification.read && (
                     <button
                       onClick={() => markAsRead(notification.id)}
-                      className="p-1.5 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+                      className="p-2 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
                       aria-label="Mark as read"
                       title="Mark as read"
                     >
-                      <Check size={14} className="text-[var(--color-text-secondary)]" />
+                      <Check size={14} className="text-[var(--color-text-muted)]" />
                     </button>
                   )}
                   <button
                     onClick={() => deleteNotification(notification.id)}
-                    className="p-1.5 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+                    className="p-2 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
                     aria-label="Delete notification"
                     title="Delete"
                   >
-                    <Trash2 size={14} className="text-[var(--color-text-secondary)]" />
+                    <Trash2 size={14} className="text-[var(--color-text-muted)]" />
                   </button>
                 </div>
               </div>

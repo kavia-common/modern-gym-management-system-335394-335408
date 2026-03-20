@@ -22,12 +22,11 @@ export default function HomePage() {
     }
   }, [isAuthenticated, router]);
 
-  // Loading state while redirect happens
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center">
-        <div className="w-8 h-8 border-2 border-[#16A34A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-        <p className="text-sm text-[var(--color-text-secondary)]">Loading...</p>
+      <div className="text-center animate-fade-in">
+        <div className="w-10 h-10 border-[3px] border-[var(--color-accent)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-sm text-[var(--color-text-muted)] font-medium">Loading...</p>
       </div>
     </div>
   );

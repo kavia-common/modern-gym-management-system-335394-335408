@@ -4,18 +4,19 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useSidebar } from "@/context/SidebarContext";
-import { Menu, Sun, Moon, Bell, LogOut, ChevronDown, PanelLeftClose, PanelLeft } from "lucide-react";
+import { Menu, Sun, Moon, Bell, LogOut, ChevronDown, PanelLeftClose, PanelLeft, Search, Settings } from "lucide-react";
 import Link from "next/link";
 import { MOCK_NOTIFICATIONS } from "@/data/mockData";
 
 /**
- * Topbar - Persistent top navigation bar.
+ * Topbar - Persistent top navigation bar with glassmorphism effect.
  *
  * Contract:
  * - Provides sidebar toggle (mobile hamburger + desktop collapse)
  * - Theme toggle (light/dark)
+ * - Search bar
  * - Notification bell with unread count
- * - User dropdown with logout
+ * - User dropdown with profile and logout
  */
 // PUBLIC_INTERFACE
 export default function Topbar() {
@@ -29,11 +30,11 @@ export default function Topbar() {
   const unreadCount = MOCK_NOTIFICATIONS.filter((n) => !n.read).length;
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 flex items-center gap-3">
+    <header className="sticky top-0 z-30 h-[var(--topbar-height)] bg-[var(--color-surface)]/80 backdrop-blur-xl border-b border-[var(--color-border)] px-4 sm:px-6 flex items-center gap-2 sm:gap-4">
       {/* Mobile menu toggle */}
       <button
         onClick={toggleMobile}
-        className="p-2 rounded-lg hover:bg-[var(--color-hover)] lg:hidden transition-colors"
+        className="p-2.5 rounded-xl hover:bg-[var(--color-hover)] lg:hidden transition-all duration-200 active:scale-95"
         aria-label="Open navigation menu"
       >
         <Menu size={20} className="text-[var(--color-text)]" />
@@ -42,86 +43,108 @@ export default function Topbar() {
       {/* Desktop collapse toggle */}
       <button
         onClick={toggleCollapse}
-        className="hidden lg:flex p-2 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
+        className="hidden lg:flex p-2.5 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {isCollapsed ? (
-          <PanelLeft size={20} className="text-[var(--color-text)]" />
+          <PanelLeft size={18} className="text-[var(--color-text-secondary)]" />
         ) : (
-          <PanelLeftClose size={20} className="text-[var(--color-text)]" />
+          <PanelLeftClose size={18} className="text-[var(--color-text-secondary)]" />
         )}
       </button>
 
-      {/* Spacer */}
-      <div className="flex-1" />
+      {/* Search bar - hidden on very small screens */}
+      <div className="hidden sm:flex flex-1 max-w-md items-center">
+        <div className="relative w-full">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" />
+          <input
+            type="text"
+            placeholder="Search anything..."
+            className="w-full pl-10 pr-4 py-2 rounded-xl text-sm bg-[var(--color-hover)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] border border-transparent focus:border-[var(--color-accent)]/30 focus:bg-[var(--color-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20 transition-all duration-200"
+            aria-label="Search"
+          />
+        </div>
+      </div>
 
-      {/* Theme toggle */}
-      <button
-        onClick={toggleTheme}
-        className="p-2 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
-        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      >
-        {theme === "light" ? (
-          <Moon size={18} className="text-[var(--color-text-secondary)]" />
-        ) : (
-          <Sun size={18} className="text-[var(--color-text-secondary)]" />
-        )}
-      </button>
+      {/* Spacer for mobile */}
+      <div className="flex-1 sm:hidden" />
 
-      {/* Notifications */}
-      <Link
-        href="/notifications"
-        className="relative p-2 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
-        aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
-      >
-        <Bell size={18} className="text-[var(--color-text-secondary)]" />
-        {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#EF4444] text-white text-[10px] font-bold flex items-center justify-center">
-            {unreadCount}
-          </span>
-        )}
-      </Link>
-
-      {/* User menu */}
-      <div className="relative">
+      {/* Right actions */}
+      <div className="flex items-center gap-1 sm:gap-2">
+        {/* Theme toggle */}
         <button
-          onClick={() => setShowUserMenu(!showUserMenu)}
-          className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-[var(--color-hover)] transition-colors"
-          aria-expanded={showUserMenu}
-          aria-haspopup="true"
+          onClick={toggleTheme}
+          className="p-2.5 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
+          aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
         >
-          <div className="w-8 h-8 rounded-full bg-[#16A34A]/20 flex items-center justify-center text-[#16A34A] text-sm font-bold">
-            {user.name.charAt(0)}
-          </div>
-          <span className="hidden sm:block text-sm font-medium text-[var(--color-text)]">{user.name}</span>
-          <ChevronDown size={14} className="hidden sm:block text-[var(--color-text-secondary)]" />
+          {theme === "light" ? (
+            <Moon size={18} className="text-[var(--color-text-secondary)]" />
+          ) : (
+            <Sun size={18} className="text-[var(--color-text-secondary)]" />
+          )}
         </button>
 
-        {showUserMenu && (
-          <>
-            <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} aria-hidden="true" />
-            <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-lg z-50 py-1">
-              <div className="px-3 py-2 border-b border-[var(--color-border)]">
-                <p className="text-sm font-medium text-[var(--color-text)]">{user.name}</p>
-                <p className="text-xs text-[var(--color-text-secondary)]">{user.email}</p>
-              </div>
-              <Link
-                href="/settings"
-                onClick={() => setShowUserMenu(false)}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-hover)] transition-colors"
-              >
-                Profile & Settings
-              </Link>
-              <button
-                onClick={() => { logout(); setShowUserMenu(false); }}
-                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[#EF4444] hover:bg-[var(--color-hover)] transition-colors"
-              >
-                <LogOut size={14} />
-                Sign Out
-              </button>
+        {/* Notifications */}
+        <Link
+          href="/notifications"
+          className="relative p-2.5 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200 active:scale-95"
+          aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
+        >
+          <Bell size={18} className="text-[var(--color-text-secondary)]" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1.5 right-1.5 w-[18px] h-[18px] rounded-full bg-[var(--color-accent)] text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-[var(--color-surface)]">
+              {unreadCount}
+            </span>
+          )}
+        </Link>
+
+        {/* User menu */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            className="flex items-center gap-2.5 p-1.5 sm:pr-3 rounded-xl hover:bg-[var(--color-hover)] transition-all duration-200"
+            aria-expanded={showUserMenu}
+            aria-haspopup="true"
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent)]/5 flex items-center justify-center text-[var(--color-accent)] text-sm font-bold ring-1 ring-[var(--color-accent)]/10">
+              {user.name.charAt(0)}
             </div>
-          </>
-        )}
+            <div className="hidden sm:block text-left">
+              <p className="text-sm font-semibold text-[var(--color-text)] leading-tight">{user.name}</p>
+              <p className="text-[11px] text-[var(--color-text-muted)] capitalize leading-tight">{user.role}</p>
+            </div>
+            <ChevronDown size={14} className="hidden sm:block text-[var(--color-text-muted)]" />
+          </button>
+
+          {showUserMenu && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} aria-hidden="true" />
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl z-50 py-2 animate-scale-in">
+                <div className="px-4 py-3 border-b border-[var(--color-divider)]">
+                  <p className="text-sm font-semibold text-[var(--color-text)]">{user.name}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{user.email}</p>
+                </div>
+                <div className="py-1">
+                  <Link
+                    href="/settings"
+                    onClick={() => setShowUserMenu(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--color-text)] hover:bg-[var(--color-hover)] transition-colors"
+                  >
+                    <Settings size={15} className="text-[var(--color-text-secondary)]" />
+                    Settings
+                  </Link>
+                  <button
+                    onClick={() => { logout(); setShowUserMenu(false); }}
+                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-[var(--color-error)] hover:bg-[var(--color-hover)] transition-colors"
+                  >
+                    <LogOut size={15} />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

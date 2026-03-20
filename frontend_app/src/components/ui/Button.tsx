@@ -13,17 +13,22 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: "bg-[#111827] text-white hover:bg-[#1F2937] dark:bg-[#16A34A] dark:hover:bg-[#15803D]",
-  secondary: "bg-[#F3F4F6] text-[#111827] hover:bg-[#E5E7EB] dark:bg-[#374151] dark:text-[#F9FAFB] dark:hover:bg-[#4B5563]",
-  outline: "border border-[#E5E7EB] bg-transparent text-[#111827] hover:bg-[#F3F4F6] dark:border-[#374151] dark:text-[#F9FAFB] dark:hover:bg-[#374151]",
-  ghost: "bg-transparent text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#111827] dark:hover:bg-[#374151] dark:hover:text-[#F9FAFB]",
-  danger: "bg-[#EF4444] text-white hover:bg-[#DC2626]",
+  primary:
+    "bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-dark)] active:bg-[var(--color-accent-dark)] shadow-sm hover:shadow-md",
+  secondary:
+    "bg-[var(--color-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] active:bg-[var(--color-border)]",
+  outline:
+    "border border-[var(--color-border)] bg-transparent text-[var(--color-text)] hover:bg-[var(--color-hover)] active:bg-[var(--color-hover)]",
+  ghost:
+    "bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-hover)] hover:text-[var(--color-text)]",
+  danger:
+    "bg-[var(--color-error)] text-white hover:bg-[#DC2626] active:bg-[#B91C1C] shadow-sm",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-4 py-2 text-sm",
-  lg: "px-6 py-3 text-base",
+  sm: "px-3 py-1.5 text-xs gap-1.5",
+  md: "px-4 py-2 text-sm gap-2",
+  lg: "px-6 py-2.5 text-sm gap-2",
 };
 
 /**
@@ -47,9 +52,9 @@ export default function Button({
   return (
     <button
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-colors duration-150 
+      className={`inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 active:scale-[0.97]
         ${variantStyles[variant]} ${sizeStyles[size]}
-        disabled:opacity-50 disabled:cursor-not-allowed
+        disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100
         ${className}`}
       {...props}
     >
